@@ -1,73 +1,178 @@
-# React + TypeScript + Vite
+# PrepRoute – Test Management Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack admin panel for creating, managing, and tracking tests. Built with React + TypeScript on the frontend and Node.js + Express on the backend.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- **Authentication** – JWT-based login with protected routes
+- **Test Management** – Create, edit, delete, and publish tests (Chapterwise, PYQ, Mock Test)
+- **Question Creation** – Rich text editor (TipTap) with MCQ options, difficulty levels, topics, and sub-topics
+- **CSV Bulk Import** – Upload questions in bulk via CSV
+- **Test Tracking** – View performance stats (attempts, avg score, pass rate, avg time) per published test
+- **Offline Fallback** – Mock data is shown when the backend is unavailable
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Frontend
+| Tool | Purpose |
+|------|---------|
+| React 19 + TypeScript | UI framework |
+| Vite | Build tool |
+| Tailwind CSS | Styling |
+| React Router v7 | Routing |
+| TanStack Query | Server state & caching |
+| React Hook Form + Zod | Forms & validation |
+| TipTap | Rich text editor |
+| Zustand | Client state management |
+| Axios | HTTP client |
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Backend
+| Tool | Purpose |
+|------|---------|
+| Node.js + Express | REST API server |
+| JSON Web Tokens | Authentication |
+| Multer | File uploads (CSV import) |
+| UUID | ID generation |
+| In-memory store | Data persistence (swap for a DB in production) |
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project Structure
+
+```
+├── src/
+│   ├── api/           # Axios instance + API calls
+│   ├── components/    # Reusable UI components (Layout, Header, Sidebar, etc.)
+│   ├── pages/         # Route-level pages
+│   │   ├── Login.tsx
+│   │   ├── Dashboard.tsx
+│   │   ├── CreateTest.tsx
+│   │   ├── QuestionCreation.tsx
+│   │   ├── Confirmation.tsx
+│   │   └── TestTracking.tsx
+│   ├── store/         # Zustand stores (auth, test)
+│   ├── types/         # TypeScript interfaces
+│   └── utils/         # Helpers
+├── backend/
+│   ├── server.js      # Express server + all API routes
+│   └── package.json
+└── public/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Getting Started
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/Vasudxtt/Frontend-Design.git
+cd Frontend-Design
 ```
+
+### 2. Run the frontend
+
+```bash
+npm install
+npm run dev
+```
+
+Runs at `http://localhost:5173`
+
+### 3. Run the backend
+
+```bash
+cd backend
+npm install
+npm start
+```
+
+Runs at `http://localhost:5000`
+
+### 4. Connect frontend to backend
+
+Create a `.env` file in the root:
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+---
+
+## API Endpoints
+
+All endpoints except `/api/auth/login` require a `Bearer` token in the `Authorization` header.
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/login` | Login, returns JWT token |
+| GET | `/api/tests` | List all tests |
+| POST | `/api/tests` | Create a test |
+| GET | `/api/tests/:id` | Get a single test |
+| PUT | `/api/tests/:id` | Update a test |
+| DELETE | `/api/tests/:id` | Delete a test |
+| POST | `/api/tests/:id/publish` | Publish or schedule a test |
+| GET | `/api/tests/:id/questions` | List questions for a test |
+| POST | `/api/tests/:id/questions` | Add a question |
+| PUT | `/api/tests/:id/questions/:qid` | Update a question |
+| DELETE | `/api/tests/:id/questions/:qid` | Delete a question |
+| POST | `/api/tests/:id/questions/bulk` | Bulk import via CSV |
+| GET | `/api/subjects` | List subjects |
+| GET | `/api/topics?subjectId=` | List topics by subject |
+| GET | `/api/subtopics?topicId=` | List sub-topics by topic |
+
+---
+
+## Demo Credentials
+
+```
+Username: vedant-admin
+Password: vedant123
+```
+
+---
+
+## Deployment (Render)
+
+### Frontend (Web Service)
+- **Build command:** `npm install && npm run build`
+- **Start command:** `npm start`
+- **Environment variable:** `VITE_API_URL=https://your-backend.onrender.com/api`
+
+### Backend (Web Service)
+- **Root directory:** `backend`
+- **Build command:** `npm install`
+- **Start command:** `npm start`
+- **Environment variables:**
+  - `JWT_SECRET` – a long random string
+  - `FRONTEND_URL` – your frontend Render URL (for CORS)
+
+---
+
+## CSV Import Format
+
+For bulk question import, use a CSV with these columns:
+
+```
+content,optionA,optionB,optionC,optionD,correctOption,solution,difficulty
+```
+
+Example:
+```csv
+content,optionA,optionB,optionC,optionD,correctOption,solution,difficulty
+What is 2+2?,3,4,5,6,B,The answer is 4,EASY
+```
+
+---
+
+## License
+
+MIT
