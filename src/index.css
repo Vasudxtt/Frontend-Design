@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    @apply bg-gray-50 text-gray-900 font-sans;
+    margin: 0;
+  }
+  #root {
+    width: 100%;
+    text-align: left;
+  }
+}
+
+@layer components {
+  .tiptap-editor .ProseMirror {
+    @apply outline-none min-h-[120px] p-3;
+  }
+  .tiptap-editor .ProseMirror p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    @apply text-gray-400 pointer-events-none float-left h-0;
+  }
+  .tiptap-editor .ProseMirror p { @apply mb-1; }
+  .tiptap-editor .ProseMirror ul { @apply list-disc pl-5 mb-2; }
+  .tiptap-editor .ProseMirror ol { @apply list-decimal pl-5 mb-2; }
+  .tiptap-editor .ProseMirror img { @apply max-w-full rounded; }
+  .tiptap-editor .ProseMirror a { @apply text-primary-600 underline; }
+}
