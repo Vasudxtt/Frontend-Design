@@ -1,4 +1,3 @@
-import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { BarChart3, Clock, Users, TrendingUp } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';

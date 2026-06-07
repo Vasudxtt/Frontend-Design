@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -14,12 +14,11 @@ import {
   AlignJustify, List, ListOrdered, ImageIcon, Table, Minus, Code2,
   Check, Trash2, Plus, ChevronLeft, ChevronRight, Upload,
 } from 'lucide-react';
-import { Header } from '../components/layout/Header';
 import { Sidebar } from '../components/layout/Sidebar';
 import { Button } from '../components/ui/Button';
 import { Select } from '../components/ui/Select';
 import { Badge } from '../components/ui/Badge';
-import { createQuestion, updateQuestion, getQuestions } from '../api/questions';
+import { createQuestion, getQuestions } from '../api/questions';
 import { getSubjects, getTopics, getSubTopics } from '../api/tests';
 import { useTestStore } from '../store/testStore';
 import type { Question, DifficultyLevel, MCQOption } from '../types';
@@ -168,7 +167,7 @@ function TiptapEditor({
 export function QuestionCreationPage() {
   const navigate = useNavigate();
   const { id: testId } = useParams<{ id: string }>();
-  const { currentTest, questions, addQuestion, updateQuestion: updateQInStore, setQuestions, currentQuestionIndex, setCurrentQuestionIndex } = useTestStore();
+  const { currentTest, questions, addQuestion, setQuestions, currentQuestionIndex, setCurrentQuestionIndex } = useTestStore();
   const fileRef = useRef<HTMLInputElement>(null);
 
   const totalQuestions = currentTest?.totalQuestions ?? 50;
@@ -206,8 +205,7 @@ export function QuestionCreationPage() {
   }, [fetchedQuestions, setQuestions]);
 
   // Fetch topics for question settings
-  const { data: subjectsRaw } = useQuery({ queryKey: ['subjects'], queryFn: getSubjects });
-  const subjects = subjectsRaw?.length ? subjectsRaw : MOCK_SUBJECTS;
+  useQuery({ queryKey: ['subjects'], queryFn: getSubjects });
 
   const currentSubjectId = currentTest?.subjectId ?? 's1';
   const { data: topicsRaw } = useQuery({
@@ -687,7 +685,7 @@ export function QuestionCreationPage() {
 }
 
 // Inline create form for the edit modal (avoids circular imports)
-function CreateTestInline({ testId, onClose }: { testId?: string; onClose: () => void }) {
+function CreateTestInline({ testId: _testId, onClose }: { testId?: string; onClose: () => void }) {
   return (
     <div className="text-sm text-gray-600 py-4">
       <p className="mb-4">Edit functionality available via the main Edit Test flow.</p>

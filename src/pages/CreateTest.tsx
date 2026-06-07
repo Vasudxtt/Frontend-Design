@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useQuery, useMutation } from '@tanstack/react-query';
@@ -84,7 +84,6 @@ export function CreateTestPage({ isModal, initialTestId, onClose, onSaved }: Cre
 
   const { setCurrentTest, setCurrentTestPayload } = useTestStore();
   const [testType, setTestType] = useState<TestType>('CHAPTERWISE');
-  const [selectedTopicIds, setSelectedTopicIds] = useState<string[]>([]);
 
   const {
     register,
@@ -95,7 +94,7 @@ export function CreateTestPage({ isModal, initialTestId, onClose, onSaved }: Cre
     reset,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema) as Resolver<FormValues>,
     defaultValues: {
       name: '',
       subjectId: '',
@@ -431,7 +430,4 @@ export function CreateTestPage({ isModal, initialTestId, onClose, onSaved }: Cre
         <div className="bg-white rounded-2xl border-2 border-primary-400 p-8">
           {formContent}
         </div>
-      </div>
-    </Layout>
-  );
-}
+  
