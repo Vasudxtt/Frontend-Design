@@ -20,7 +20,7 @@ const schema = z.object({
   topicIds: z.array(z.string()).min(1, 'At least one topic is required'),
   subTopicIds: z.array(z.string()),
   duration: z.coerce
-    .number({ invalid_type_error: 'Duration must be a number' })
+    .number()
     .int('Duration must be a whole number')
     .positive('Duration must be greater than 0')
     .min(1, 'Duration must be at least 1 minute'),
@@ -29,7 +29,7 @@ const schema = z.object({
   wrongMarks: z.coerce.number(),
   unattemptedMarks: z.coerce.number(),
   totalQuestions: z.coerce
-    .number({ invalid_type_error: 'Number of questions is required' })
+    .number()
     .int('Must be a whole number')
     .positive('Must have at least 1 question')
     .min(1, 'Must have at least 1 question'),
