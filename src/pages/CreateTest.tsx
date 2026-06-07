@@ -430,4 +430,7 @@ export function CreateTestPage({ isModal, initialTestId, onClose, onSaved }: Cre
         <div className="bg-white rounded-2xl border-2 border-primary-400 p-8">
           {formContent}
         </div>
-  
+      </div>
+    </Layout>
+  );
+}
